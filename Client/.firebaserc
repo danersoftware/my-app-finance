@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "finance-7a62a": {
+      "hosting": {
+        "Client": [
+          "finance-7a62a"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "finance-7a62a"
+  }
+}

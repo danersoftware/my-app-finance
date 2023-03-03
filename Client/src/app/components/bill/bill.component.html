@@ -1,0 +1,244 @@
+<form [formGroup]="billForm" (ngSubmit)="addBill()">
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="billNumber">Bill Number:</label>
+    <div class="col-sm-10">
+      <input
+        type="text"
+        class="form-control"
+        id="billNumber"
+        formControlName="billNumber"
+        aria-describedby="billNumber"
+        placeholder="Bill Number"
+      />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="billDescription"
+      >Bill Description:</label
+    >
+    <div class="col-sm-10">
+      <input
+        type="text"
+        class="form-control"
+        id="billDescription"
+        formControlName="billDescription"
+        aria-describedby="billDescription"
+        placeholder="Bill Description"
+      />
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="currency">Currency: </label>
+    <div class="col-sm-10">
+      <!-- <input
+        type="text"
+        class="form-control"
+        id="currency"
+        formControlName="currency"
+        aria-describedby="currency"
+        placeholder="Currency"
+      /> -->
+      <select
+        formControlName="currency"
+        id="currency"
+        class="form-control form-select"
+        aria-label="currency"
+      >
+        <option selected>Select Currency</option>
+        <option value="Dollar">Dollar</option>
+        <option value="Dinar">Dinar</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="date">Date:</label>
+    <div class="col-sm-10">
+      <input
+        type="date"
+        class="form-control"
+        id="date"
+        formControlName="date"
+        aria-describedby="date"
+        placeholder="Date"
+      />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="totalCost">Total Cost:</label>
+    <div class="col-sm-10">
+      <input
+        type="number"
+        class="form-control"
+        id="totalCost"
+        formControlName="totalCost"
+        aria-describedby="totalCost"
+        placeholder="Total Cost"
+      />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="comment">Comment:</label>
+    <div class="col-sm-10">
+      <textarea
+        class="form-control"
+        id="comment"
+        formControlName="comment"
+        aria-describedby="comment"
+      ></textarea>
+    </div>
+  </div>
+  <div class="form-group row">
+    <!-- <label class="col-sm-2 col-form-label" for="filePath">File Path:</label>
+    <div class="col-sm-10">
+      <input
+        type="text"
+        class="form-control"
+        id="filePath"
+        formControlName="filePath"
+        aria-describedby="filePath"
+        placeholder="File Path"
+      />
+    </div> -->
+    <div class="mb-3">
+      <!-- <label for="filePath" class="form-label">Upload Bill Photo</label>
+      <input
+        class="form-control"
+        type="file"
+        id="filePath"
+        formControlName="filePath"
+      /> -->
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-12">
+      <button
+        *ngIf="!updateButton"
+        [disabled]="!billForm.valid"
+        type="submit"
+        class="btn btn-primary"
+      >
+        Add Bill
+      </button>
+      <button
+        *ngIf="updateButton"
+        type="button"
+        class="btn btn-primary"
+        (click)="updateBill()"
+      >
+        Update
+      </button>
+    </div>
+  </div>
+
+  <hr />
+</form>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="text-center" scope="col">#</th>
+        <th class="text-center" scope="col">Bill Number</th>
+        <th class="text-center" scope="col">Bill Description</th>
+        <th class="text-center" scope="col">Currency</th>
+        <th class="text-center" scope="col">Date</th>
+        <!-- <th class="text-center" scope="col">Entered Date</th> -->
+        <!-- <th class="text-center" scope="col">Comment</th> -->
+        <th class="text-center" scope="col">Total Cost</th>
+        <!-- <th class="text-center" scope="col">Reference</th> -->
+        <th class="text-center" scope="col">D</th>
+        <th class="text-center" scope="col">U</th>
+        <th class="text-center" scope="col">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bill of bills | async; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ bill.billNumber }}</td>
+        <td>{{ bill.billDescription }}</td>
+        <td>{{ bill.currency }}</td>
+        <td>{{ bill.date["seconds"] * 1000 | date : "dd/MM/yyyy" }}</td>
+        <!-- <td>{{ bill.enteredDate["seconds"] * 1000 | date : "yyyy/MM/dd" }}</td> -->
+        <!-- <td>{{ bill.comment }}</td> -->
+        <td>{{ bill.totalCost }}</td>
+        <!-- <td>{{ bill.filePath }}</td> -->
+        <td>
+          <button
+            type="button"
+            (click)="delete(bill.id)"
+            class="btn btn-danger"
+          >
+            <strong> <i class="bi bi-x"></i>Delete</strong>
+          </button>
+        </td>
+        <td>
+          <button type="button" class="btn btn-success" (click)="update(bill)">
+            <strong> <i class="bi bi-arrow-repeat"></i>Update</strong>
+          </button>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-info"
+            (click)="goToDetails(bill)"
+          >
+            <strong><i class="bi bi-info-lg"></i>Details</strong>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><strong>Grand Total</strong></td>
+        <td colspan="3">
+          <strong>$ {{ totalCostDollar }}</strong>
+        </td>
+        <td></td>
+        <td colspan="4">
+          <strong>IQD {{ totalCostDinar }}</strong>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<div class="row itemsBlock">
+  <div *ngFor="let bill of billsFiltered" class="col-md-4 col-sm-6 col-12">
+    <div class="col-sm-3">
+      <div class="card" style="width: 18rem">
+        <div class="card-body">
+          <h5 class="card-title">{{ bill.billNumber }}</h5>
+          <p class="card-text">
+            {{ bill.comment }}
+          </p>
+          <a href="#" class="btn btn-primary">Details</a>
+        </div>
+      </div>
+    </div>
+    <br />
+  </div>
+</div>
+
+<!-- ["seconds"] * 1000 | date : "yyyy/MM/dd"  -->
+
+<ng-template #modalTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="modalRef.hide()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-upload></app-upload>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="modalRef.hide()">
+      Close
+    </button>
+  </div>
+</ng-template>

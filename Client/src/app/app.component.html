@@ -1,0 +1,23 @@
+<div
+  class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow"
+>
+  <a [routerLink]="['/']">
+    <h5 class="my-0 mr-md-auto font-weight-normal">Mamxalan Co.</h5></a
+  >
+  <nav class="my-2 my-md-0 mr-md-3">
+    <!-- <a class="p-2 text-dark" href="#">Features</a>
+    <a class="p-2 text-dark" href="#">Enterprise</a>
+    <a class="p-2 text-dark" href="#">Support</a>
+    <a class="p-2 text-dark" href="#">Pricing</a> -->
+  </nav>
+  <!-- <a class="btn btn-outline-primary" href="#">Sign up</a> -->
+</div>
+
+<div class="container">
+  <div>
+    <router-outlet *ngIf="connected"></router-outlet>
+    <h3 *ngIf="!connected" class="text-center">Internet is not connected!</h3>
+  </div>
+
+  <footer class="pt-4 my-md-5 pt-md-5 border-top"></footer>
+</div>
